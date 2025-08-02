@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam License Info</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 헤더 네비게이션 */
+        .header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .nav h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #4a90e2;
+        }
+
+        /* 인기 자격증 섹션 */
+        .popular-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .cert-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 50px;
+        }
+
+        .cert-card {
+            background: #e3f2fd;
+            padding: 40px 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .cert-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .cert-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* 최신 기출문제 섹션 */
+        .recent-exams {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 50px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .exam-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .exam-table th,
+        .exam-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .exam-table th {
+            background-color: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #357abd;
+        }
+
+        .btn-outline {
+            background-color: white;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-link {
+            color: #4a90e2;
+            background: none;
+            border: none;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* 분야별 자격증 */
+        .category-section {
+            margin-bottom: 50px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .category-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 500;
+            color: #666;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-item:hover {
+            color: #4a90e2;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        /* 기출 해설 BEST */
+        .best-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 50px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .best-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .best-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .best-list li:hover {
+            color: #4a90e2;
+        }
+
+        .best-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* 푸터 */
+        .footer {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #4a90e2;
+        }
+
+        .footer-info {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .cert-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <nav class="nav">
+                <h1>Exam License Info</h1>
+                <ul class="nav-links">
+                    <li><a href="#전체-자격증-및">전체 자격증 및</a></li>
+                    <li><a href="#퍼펙트-기출문제">퍼펙트 기출문제</a></li>
+                    <li><a href="#해설과-영상">해설과 영상</a></li>
+                    <li><a href="#지식원리-집는-최가-책사">지식원리 집는 최가 책사</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- 인기 자격증 바로가기 -->
+        <section class="popular-section">
+            <h2 class="section-title">인기 자격증 바로가기</h2>
+            <div class="cert-grid">
+                <div class="cert-card">
+                    <div class="cert-icon">📊</div>
+                    <div class="cert-name">전산회계 2급</div>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">💻</div>
+                    <div class="cert-name">컴퓨터활용능력 1급</div>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">📖</div>
+                    <div class="cert-name">한국사 능력검정</div>
+                </div>
+                <div class="cert-card">
+                    <div class="cert-icon">📋</div>
+                    <div class="cert-name">사회복지사</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 화차별 최신 기출문제 -->
+        <section class="recent-exams">
+            <h2 class="section-title">화차별 최신 기출문제</h2>
+            <table class="exam-table">
+                <tbody>
+                    <tr>
+                        <td><strong>전산회계 2급</strong></td>
+                        <td>제 12회</td>
+                        <td><button class="btn-link">문제보기</button></td>
+                        <td><a href="#" class="btn btn-primary">답체보기</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>컴활 1급</strong></td>
+                        <td>2025년 CBT</td>
+                        <td><button class="btn-link">해설보기</button></td>
+                        <td><a href="#" class="btn btn-primary">예범보기</a></td>
+                    </tr>
+                    <tr>
+                        <td><strong>한국사능력검정</strong></td>
+                        <td>72회</td>
+                        <td><button class="btn-link">POF</button></td>
+                        <td><a href="#" class="btn btn-outline">PDF</a> <span style="color: #888;">∧</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 분야별 자격증 분류 -->
+        <section class="category-section">
+            <h2 class="section-title">분야별 자격증 분류</h2>
+            <div class="category-grid">
+                <div class="category-item">회계/세무</div>
+                <div class="category-item">컴퓨터/정보처리</div>
+                <div class="category-item">국가기사/자격</div>
+                <div class="category-item">취업/직무</div>
+            </div>
+        </section>
+
+        <!-- 기출 해설 BEST 모음 -->
+        <section class="best-section">
+            <h2 class="section-title">기출 해설 BEST 모음</h2>
+            <ul class="best-list">
+                <li>자주 틀리는 전산회계 이론 10선</li>
+                <li>컴활 엑셀 핵심 기출 중정리</li>
+                <li>공인중개사 인범 파식 조문 해설</li>
+            </ul>
+        </section>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="#">사이트 소개</a>
+                <a href="#">저작권 정보</a>
+                <a href="#">이용약관</a>
+            </div>
+            <div class="footer-info">
+                개인정보처리방침
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
