@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제 119회 전산회계 2급 온라인 풀이 | ExamLicenseInfo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 헤더 */
+        .header {
+            background: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .exam-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .exam-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .progress-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #4a90e2;
+            transition: width 0.3s ease;
+        }
+
+        /* 문제 영역 */
+        .question-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .question-category {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .options {
+            margin-bottom: 30px;
+        }
+
+        .option {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #4a90e2;
+            background: #f8f9ff;
+        }
+
+        .option.selected {
+            border-color: #4a90e2;
+            background: #e3f2fd;
+        }
+
+        .option.correct {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .option.wrong {
+            border-color: #dc3545;
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .option-number {
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 25px;
+            color: #666;
+        }
+
+        .option-text {
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .option-icon {
+            margin-left: 10px;
+            font-size: 18px;
+        }
+
+        /* 답안 확인 영역 */
+        .answer-section {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .answer-section.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .answer-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .answer-result {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .answer-result.correct {
+            color: #28a745;
+        }
+
+        .answer-result.wrong {
+            color: #dc3545;
+        }
+
+        .answer-explanation {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* 버튼 영역 */
+        .button-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-check {
+            background: #4a90e2;
+            color: white;
+            min-width: 120px;
+        }
+
+        .btn-check:hover:not(:disabled) {
+            background: #357abd;
+        }
+
+        .btn-next {
+            background: #28a745;
+            color: white;
+            min-width: 120px;
+        }
+
+        .btn-next:hover:not(:disabled) {
+            background: #218838;
+        }
+
+        .btn-prev {
+            background: #6c757d;
+            color: white;
+            min-width: 120px;
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #545b62;
+        }
+
+        .btn-outline {
+            background: white;
+            border: 1px solid #ddd;
+            color: #666;
+        }
+
+        .btn-outline:hover {
+            background: #f8f9fa;
+        }
+
+        /* 사이드 네비게이션 */
+        .side-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .nav-title {
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+            color: #333;
+        }
+
+        .question-nav {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .nav-item {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-item.current {
+            background: #4a90e2;
+            color: white;
+            border-color: #4a90e2;
+        }
+
+        .nav-item.answered {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .nav-item:hover {
+            border-color: #4a90e2;
+        }
+
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .side-nav {
+                display: none;
+            }
+
+            .exam-info {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .progress-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .progress-bar {
+                flex: 1;
+                margin: 0 15px;
+            }
+
+            .question-container {
+                padding: 25px;
+            }
+
+            .button-area {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="exam-info">
+                <div>
+                    <h1 class="exam-title">제 119회 전산회계 2급</h1>
+                    <div style="color: #666; font-size: 14px; margin-top: 5px;">2025년 4월 5일 시행</div>
+                </div>
+                <div class="progress-info">
+                    <span id="currentQuestion">1</span> / <span id="totalQuestions">15</span>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill" style="width: 6.7%;"></div>
+                    </div>
+                    <span id="progressPercent">6.7%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="question-container">
+            <div class="question-header">
+                <div class="question-number" id="questionNumber">문제 1</div>
+                <div class="question-category" id="questionCategory">재무제표</div>
+            </div>
+
+            <div class="question-text" id="questionText">
+                다음 중 일반기업회계기준상 재무제표에 해당하는 것으로만 구성된 것은?
+            </div>
+
+            <div class="options" id="optionsContainer">
+                <div class="option" onclick="selectOption(1)">
+                    <span class="option-number">①</span>
+                    <span class="option-text">재무상태표, 시산표</span>
+                    <span class="option-icon"></span>
+                </div>
+                <div class="option" onclick="selectOption(2)">
+                    <span class="option-number">②</span>
+                    <span class="option-text">손익계산서, 시산표</span>
+                    <span class="option-icon"></span>
+                </div>
+                <div class="option" onclick="selectOption(3)">
+                    <span class="option-number">③</span>
+                    <span class="option-text">현금흐름표, 자본변동표</span>
+                    <span class="option-icon"></span>
+                </div>
+                <div class="option" onclick="selectOption(4)">
+                    <span class="option-number">④</span>
+                    <span class="option-text">주석, 분개장</span>
+                    <span class="option-icon"></span>
+                </div>
+            </div>
+
+            <div class="answer-section" id="answerSection">
+                <div class="answer-header">
+                    <span class="answer-result" id="answerResult">정답입니다! ✓</span>
+                </div>
+                <div class="answer-explanation" id="answerExplanation">
+                    현금흐름표와 자본변동표는 재무제표에 해당되나 시산표, 분개장은 아니다.
+                </div>
+            </div>
+
+            <div class="button-area">
+                <button class="btn btn-prev" id="prevBtn" onclick="prevQuestion()">이전 문제</button>
+                <div>
+                    <button class="btn btn-outline" onclick="goToQuestionList()">문제 목록</button>
+                </div>
+                <button class="btn btn-check" id="checkBtn" onclick="checkAnswer()" disabled>정답 확인</button>
+                <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()" disabled>다음 문제</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 사이드 네비게이션 -->
+    <div class="side-nav">
+        <div class="nav-title">문제 번호</div>
+        <div class="question-nav" id="questionNav">
+            <div class="nav-item current" onclick="goToQuestion(0)">1</div>
+            <div class="nav-item" onclick="goToQuestion(1)">2</div>
+            <div class="nav-item" onclick="goToQuestion(2)">3</div>
+            <div class="nav-item" onclick="goToQuestion(3)">4</div>
+            <div class="nav-item" onclick="goToQuestion(4)">5</div>
+            <div class="nav-item" onclick="goToQuestion(5)">6</div>
+            <div class="nav-item" onclick="goToQuestion(6)">7</div>
+            <div class="nav-item" onclick="goToQuestion(7)">8</div>
+            <div class="nav-item" onclick="goToQuestion(8)">9</div>
+            <div class="nav-item" onclick="goToQuestion(9)">10</div>
+            <div class="nav-item" onclick="goToQuestion(10)">11</div>
+            <div class="nav-item" onclick="goToQuestion(11)">12</div>
+            <div class="nav-item" onclick="goToQuestion(12)">13</div>
+            <div class="nav-item" onclick="goToQuestion(13)">14</div>
+            <div class="nav-item" onclick="goToQuestion(14)">15</div>
+        </div>
+    </div>
+
+    <script>
+        console.log('119회 스크립트 시작');
+
+        // 문제 데이터 (119회 전체 15문제)
+        const questionsData = [
+            {
+                id: 1,
+                category: "재무제표",
+                question: "다음 중 일반기업회계기준상 재무제표에 해당하는 것으로만 구성된 것은?",
+                options: [
+                    "재무상태표, 시산표",
+                    "손익계산서, 시산표",
+                    "현금흐름표, 자본변동표",
+                    "주석, 분개장"
+                ],
+                correctAnswer: 3,
+                explanation: "현금흐름표와 자본변동표는 재무제표에 해당되나 시산표, 분개장은 아니다."
+            },
+            {
+                id: 2,
+                category: "분개처리",
+                question: "상품매출 계약금을 현금으로 받고 '(차) 현금 / (대) 상품매출'로 처리한 경우 재무상태표 영향은?",
+                options: [
+                    "자산이 과소계상 된다.",
+                    "자산이 과대계상 된다.",
+                    "부채가 과대계상 된다.",
+                    "부채가 과소계상 된다."
+                ],
+                correctAnswer: 4,
+                explanation: "상품 매출이 아닌 선수금으로 처리해야 하므로 부채가 과소계상된 것이다."
+            }
+        ];
+
+        // 전역 변수
+        let currentQuestionIndex = 0;
+        let userAnswers = new Array(15).fill(null);
+        let answeredQuestions = new Set();
+
+        console.log('데이터 로드:', questionsData.length, '문제');
+
+        // 선택지 선택
+        function selectOption(optionNumber) {
+            console.log('선택지 클릭:', optionNumber);
+            
+            // 기존 선택 해제
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 새로운 선택
+            document.querySelectorAll('.option')[optionNumber - 1].classList.add('selected');
+            userAnswers[currentQuestionIndex] = optionNumber;
+            
+            // 정답 확인 버튼 활성화
+            document.getElementById('checkBtn').disabled = false;
+            console.log('답안 저장:', userAnswers[currentQuestionIndex]);
+        }
+
+        // 정답 확인
+        function checkAnswer() {
+            console.log('정답 확인 버튼 클릭');
+            
+            const question = questionsData[currentQuestionIndex];
+            const userAnswer = userAnswers[currentQuestionIndex];
+            const correctAnswer = question.correctAnswer;
+            
+            console.log('사용자 답:', userAnswer, '정답:', correctAnswer);
+            
+            // 정답 표시
+            document.querySelectorAll('.option').forEach((opt, index) => {
+                const optionNumber = index + 1;
+                const icon = opt.querySelector('.option-icon');
+                
+                if (optionNumber === correctAnswer) {
+                    opt.classList.add('correct');
+                    icon.textContent = '✓';
+                } else if (optionNumber === userAnswer && userAnswer !== correctAnswer) {
+                    opt.classList.add('wrong');
+                    icon.textContent = '✗';
+                }
+            });
+
+            // 해설 표시
+            document.getElementById('answerExplanation').textContent = question.explanation;
+            document.getElementById('answerSection').classList.add('show');
+            
+            if (userAnswer === correctAnswer) {
+                document.getElementById('answerResult').textContent = '정답입니다! ✓';
+                document.getElementById('answerResult').className = 'answer-result correct';
+            } else {
+                document.getElementById('answerResult').textContent = '틀렸습니다. ✗';
+                document.getElementById('answerResult').className = 'answer-result wrong';
+            }
+
+            // 답변한 문제로 표시
+            answeredQuestions.add(currentQuestionIndex);
+            
+            // 버튼 상태 업데이트
+            document.getElementById('checkBtn').disabled = true;
+            document.getElementById('nextBtn').disabled = false;
+            
+            // 네비게이션 업데이트
+            updateQuestionNavigation();
+        }
+
+        // 다음 문제
+        function nextQuestion() {
+            if (currentQuestionIndex < questionsData.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            }
+        }
+
+        // 이전 문제  
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        // 특정 문제로 이동
+        function goToQuestion(index) {
+            currentQuestionIndex = index;
+            displayQuestion();
+        }
+
+        // 문제 표시
+        function displayQuestion() {
+            const question = questionsData[currentQuestionIndex];
+            
+            // 문제 정보 업데이트
+            document.getElementById('questionNumber').textContent = `문제 ${question.id}`;
+            document.getElementById('questionCategory').textContent = question.category;
+            document.getElementById('questionText').textContent = question.question;
+
+            // 진행률 업데이트
+            const current = currentQuestionIndex + 1;
+            const total = questionsData.length;
+            const percent = Math.round((current / total) * 100);
+            
+            document.getElementById('currentQuestion').textContent = current;
+            document.getElementById('totalQuestions').textContent = total;
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressPercent').textContent = percent + '%';
+
+            // 선택지 업데이트
+            const options = document.querySelectorAll('.option');
+            question.options.forEach((option, index) => {
+                if (options[index]) {
+                    options[index].querySelector('.option-text').textContent = option;
+                    // 스타일 초기화
+                    options[index].className = 'option';
+                    options[index].querySelector('.option-icon').textContent = '';
+                }
+            });
+
+            // 이전 답안이 있으면 표시
+            if (userAnswers[currentQuestionIndex]) {
+                selectOption(userAnswers[currentQuestionIndex]);
+            }
+
+            // 답안 섹션 숨기기
+            document.getElementById('answerSection').classList.remove('show');
+            
+            // 버튼 상태 업데이트
+            updateButtons();
+            updateQuestionNavigation();
+        }
+
+        // 버튼 상태 업데이트
+        function updateButtons() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const checkBtn = document.getElementById('checkBtn');
+            
+            // 이전 버튼
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            // 이미 답안을 확인한 문제라면
+            if (answeredQuestions.has(currentQuestionIndex)) {
+                checkBtn.disabled = true;
+                nextBtn.disabled = currentQuestionIndex === questionsData.length - 1;
+            } else {
+                // 답안을 선택했으면 정답 확인 버튼 활성화
+                const hasAnswer = userAnswers[currentQuestionIndex] != null;
+                checkBtn.disabled = !hasAnswer;
+                nextBtn.disabled = true;
+            }
+        }
+
+        // 문제 네비게이션 업데이트
+        function updateQuestionNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach((item, index) => {
+                item.className = 'nav-item';
+                if (index === currentQuestionIndex) {
+                    item.classList.add('current');
+                } else if (answeredQuestions.has(index)) {
+                    item.classList.add('answered');
+                }
+            });
+        }
+
+        // 문제 목록으로 돌아가기
+        function goToQuestionList() {
+            console.log('문제 목록 버튼 클릭');
+            if (confirm('문제 풀이를 종료하고 목록으로 돌아가시겠습니까?')) {
+                window.location.href = '../index.html';
+            }
+        }
+
+        // 초기 표시
+        displayQuestion();
+
+        console.log('119회 스크립트 로드 완료');
+    </script>
+</body>
+</html>
