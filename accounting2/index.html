@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>전산회계 2급 기출문제 | 온라인 풀이 및 PDF 다운로드 | ExamLicenseInfo</title>
+    <title>전산회계 2급 기출문제 | 온라인 풀이 | ExamLicenseInfo</title>
     <style>
         * {
             margin: 0;
@@ -281,20 +281,20 @@
         <!-- 통계 섹션 -->
         <div class="stats-section">
             <div class="stat-card">
-                <div class="stat-number">24</div>
+                <div class="stat-number" id="totalExamsCount">3</div>
                 <div class="stat-label">총 기출문제 수</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">1,240</div>
+                <div class="stat-number" id="totalQuestionsCount">45</div>
                 <div class="stat-label">총 문제 수</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalExamsCount">10</div>
-                <div class="stat-label">총 기출문제 수</div>
+                <div class="stat-number" id="latestExamCount">120</div>
+                <div class="stat-label">최신 회차</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number">15,680</div>
-                <div class="stat-label">누적 다운로드</div>
+                <div class="stat-number">1,680</div>
+                <div class="stat-label">누적 사용자</div>
             </div>
         </div>
 
@@ -306,8 +306,6 @@
                     <button class="filter-btn active">전체</button>
                     <button class="filter-btn">2025</button>
                     <button class="filter-btn">2024</button>
-                    <button class="filter-btn">2023</button>
-                    <button class="filter-btn">2022</button>
                 </div>
             </div>
         </div>
@@ -322,87 +320,34 @@
     </div>
 
     <script>
-        // 기출문제 데이터 (실제 데이터 구조)
+        // 실제 JSON 데이터 기반 기출문제 데이터
         const examData = [
             {
-                id: 25,
-                title: "제 25회 전산회계 2급",
-                date: "2025.07.14",
+                id: 120,
+                title: "제 120회 전산회계 2급",
+                date: "2025.06.07",
                 year: "2025",
                 questions: "이론 15문항",
-                badge: "NEW"
+                badge: "NEW",
+                exam_type: "theory"
             },
             {
-                id: 24,
-                title: "제 24회 전산회계 2급",
-                date: "2025.04.20",
+                id: 119,
+                title: "제 119회 전산회계 2급",
+                date: "2025.04.05",
                 year: "2025",
                 questions: "이론 15문항",
-                badge: ""
+                badge: "",
+                exam_type: "theory"
             },
             {
-                id: 23,
-                title: "제 23회 전산회계 2급",
-                date: "2025.01.19",
-                year: "2025",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 22,
-                title: "제 22회 전산회계 2급",
-                date: "2024.11.17",
+                id: 118,
+                title: "제 118회 전산회계 2급",
+                date: "2024.12.02",
                 year: "2024",
                 questions: "이론 15문항",
-                badge: "인기"
-            },
-            {
-                id: 21,
-                title: "제 21회 전산회계 2급",
-                date: "2024.08.18",
-                year: "2024",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 20,
-                title: "제 20회 전산회계 2급",
-                date: "2024.05.26",
-                year: "2024",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 19,
-                title: "제 19회 전산회계 2급",
-                date: "2024.02.25",
-                year: "2024",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 18,
-                title: "제 18회 전산회계 2급",
-                date: "2023.11.19",
-                year: "2023",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 17,
-                title: "제 17회 전산회계 2급",
-                date: "2023.08.20",
-                year: "2023",
-                questions: "이론 15문항",
-                badge: ""
-            },
-            {
-                id: 16,
-                title: "제 16회 전산회계 2급",
-                date: "2022.11.20",
-                year: "2022",
-                questions: "이론 15문항",
-                badge: ""
+                badge: "인기",
+                exam_type: "theory"
             }
         ];
 
@@ -419,8 +364,8 @@
                 filteredData = filteredData.filter(exam => exam.year === currentFilters.year);
             }
 
-            // 최신순으로 정렬
-            filteredData.sort((a, b) => new Date(b.date) - new Date(a.date));
+            // 최신순으로 정렬 (ID 기준 내림차순)
+            filteredData.sort((a, b) => b.id - a.id);
 
             // HTML 생성
             const examListContainer = document.querySelector('.exam-list');
@@ -454,6 +399,15 @@
         // 통계 업데이트
         function updateStats(filteredData) {
             document.getElementById('totalExamsCount').textContent = filteredData.length;
+            const totalQuestions = filteredData.reduce((sum, exam) => {
+                return sum + parseInt(exam.questions.match(/\d+/)[0]);
+            }, 0);
+            document.getElementById('totalQuestionsCount').textContent = totalQuestions;
+            
+            if (filteredData.length > 0) {
+                const latestExam = Math.max(...filteredData.map(exam => exam.id));
+                document.getElementById('latestExamCount').textContent = latestExam;
+            }
         }
 
         // 기출문제 아이템 HTML 생성
@@ -469,6 +423,7 @@
                     <div class="exam-meta">
                         <span>${exam.date} 시행</span>
                         <span>${exam.questions}</span>
+                        <span>유형: ${exam.exam_type === 'theory' ? '이론' : '실무'}</span>
                     </div>
                 </div>
                 <div class="exam-actions">
@@ -500,20 +455,13 @@
         // 온라인 풀이 시작
         function startOnlineExam(examId) {
             // 실제 온라인 풀이 페이지로 이동
-            window.location.href = `${examId}/`;
+            alert(`제 ${examId}회 전산회계 2급 온라인 풀이를 시작합니다!`);
+            // window.location.href = `exam/${examId}/`;
         }
 
         // 페이지 로드 시 초기 렌더링
         document.addEventListener('DOMContentLoaded', function() {
             renderExamList();
-        });
-
-        // 온라인 풀이 버튼 클릭 이벤트
-        document.querySelectorAll('.btn-primary').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const examTitle = this.closest('.exam-item').querySelector('.exam-title').textContent.trim();
-                alert(`${examTitle} 온라인 풀이를 시작합니다!`);
-            });
         });
     </script>
 </body>
