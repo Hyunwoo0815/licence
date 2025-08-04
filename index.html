@@ -82,7 +82,7 @@
 
         .cert-card {
             background: #e3f2fd;
-            padding: 40px 20px;
+            padding: 30px 20px;
             border-radius: 15px;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s;
@@ -98,15 +98,16 @@
         }
 
         .cert-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
+            font-size: 40px;
+            margin-bottom: 15px;
             color: #1976d2;
         }
 
         .cert-name {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             color: #333;
+            line-height: 1.3;
         }
 
         /* 최신 기출문제 섹션 */
@@ -265,6 +266,69 @@
             font-size: 14px;
         }
 
+        /* 준비중 알림 스타일 */
+        .preparing-alert {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .preparing-alert.show {
+            opacity: 1;
+        }
+
+        .preparing-alert h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .preparing-alert p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .preparing-alert button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .preparing-alert button:hover {
+            background: #357abd;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
         /* 반응형 디자인 */
         @media (max-width: 768px) {
             .nav {
@@ -285,58 +349,74 @@
                 gap: 15px;
             }
         }
+
+        @media (max-width: 480px) {
+            .cert-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .preparing-alert {
+                margin: 20px;
+                padding: 25px 30px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 인기 자격증 바로가기 -->
+        <!-- 인기 자격증 기출문제 바로가기 -->
         <section class="popular-section">
-            <h2 class="section-title">인기 자격증 바로가기</h2>
+            <h2 class="section-title">인기 자격증 기출문제 바로가기</h2>
             <div class="cert-grid">
                 <a href="accounting2/" class="cert-card">
                     <div class="cert-icon">📊</div>
                     <div class="cert-name">전산회계 2급</div>
                 </a>
-                <div class="cert-card">
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">📈</div>
+                    <div class="cert-name">전산회계 1급</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">💰</div>
+                    <div class="cert-name">전산세무 2급</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">💼</div>
+                    <div class="cert-name">전산세무 1급</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">📖</div>
+                    <div class="cert-name">한국사능력검정</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
                     <div class="cert-icon">💻</div>
+                    <div class="cert-name">컴퓨터활용능력 2급</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">🖥️</div>
                     <div class="cert-name">컴퓨터활용능력 1급</div>
                 </div>
-                <div class="cert-card">
-                    <div class="cert-icon">📖</div>
-                    <div class="cert-name">한국사 능력검정</div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">🏠</div>
+                    <div class="cert-name">공인중개사</div>
                 </div>
-                <div class="cert-card">
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">🏢</div>
+                    <div class="cert-name">주택관리사</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
                     <div class="cert-icon">📋</div>
-                    <div class="cert-name">사회복지사</div>
+                    <div class="cert-name">행정사</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">👥</div>
+                    <div class="cert-name">직업상담사 2급</div>
+                </div>
+                <div class="cert-card" onclick="showPreparingAlert()">
+                    <div class="cert-icon">🤝</div>
+                    <div class="cert-name">사회복지사 2급</div>
                 </div>
             </div>
-        </section>
-
-        <!-- 화차별 최신 기출문제 -->
-        <section class="recent-exams">
-            <h2 class="section-title">화차별 최신 기출문제</h2>
-            <table class="exam-table">
-                <tbody>
-                    <tr>
-                        <td><strong>전산회계 2급</strong></td>
-                        <td>제 12회</td>
-                        <td><button class="btn-link">문제보기</button></td>
-                        <td><a href="#" class="btn btn-primary">답체보기</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>컴활 1급</strong></td>
-                        <td>2025년 CBT</td>
-                        <td><button class="btn-link">해설보기</button></td>
-                        <td><a href="#" class="btn btn-primary">예범보기</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>한국사능력검정</strong></td>
-                        <td>72회</td>
-                        <td><button class="btn-link">POF</button></td>
-                        <td><a href="#" class="btn btn-outline">PDF</a> <span style="color: #888;">∧</span></td>
-                    </tr>
-                </tbody>
-            </table>
         </section>
 
         <!-- 분야별 자격증 분류 -->
@@ -355,8 +435,8 @@
             <h2 class="section-title">기출 해설 BEST 모음</h2>
             <ul class="best-list">
                 <li>자주 틀리는 전산회계 이론 10선</li>
-                <li>컴활 엑셀 핵심 기출 중정리</li>
-                <li>공인중개사 인범 파식 조문 해설</li>
+                <li>컴활 엑셀 핵심 기출 총정리</li>
+                <li>공인중개사 민법 판례 조문 해설</li>
             </ul>
         </section>
 
@@ -372,6 +452,33 @@
             </div>
         </footer>
     </div>
+
+    <!-- 준비중 알림 모달 -->
+    <div class="overlay" id="overlay" onclick="hidePreparingAlert()"></div>
+    <div class="preparing-alert" id="preparingAlert">
+        <h3>🚧 준비 중입니다</h3>
+        <p>해당 자격증의 기출문제는 현재 준비 중입니다.<br>빠른 시일 내에 제공하도록 하겠습니다.</p>
+        <button onclick="hidePreparingAlert()">확인</button>
+    </div>
+
+    <script>
+        function showPreparingAlert() {
+            document.getElementById('overlay').classList.add('show');
+            document.getElementById('preparingAlert').classList.add('show');
+        }
+
+        function hidePreparingAlert() {
+            document.getElementById('overlay').classList.remove('show');
+            document.getElementById('preparingAlert').classList.remove('show');
+        }
+
+        // ESC 키로도 닫을 수 있게
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hidePreparingAlert();
+            }
+        });
+    </script>
 </body>
 
 </html>
