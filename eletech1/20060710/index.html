@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전기기능사 CBT</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Malgun Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .exam-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        
+        .info-item {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .progress-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .progress-bar {
+            background: #e9ecef;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            height: 100%;
+            width: 0%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .timer {
+            color: #e74c3c;
+            font-size: 18px;
+        }
+        
+        .question-container {
+            padding: 40px;
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .question-number {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        .subject {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .question-text {
+            font-size: 18px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .question-image {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #bdc3c7;
+        }
+        
+        .image-placeholder {
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 14px;
+        }
+        
+        .options {
+            margin-top: 30px;
+        }
+        
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 18px 20px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+            position: relative;
+        }
+        
+        .option:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(33, 150, 243, 0.2);
+        }
+        
+        .option.selected {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #2e7d32;
+            transform: translateX(5px);
+        }
+        
+        .option.correct {
+            background: #e8f5e8;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        .option.incorrect {
+            background: #ffebee;
+            border-color: #f44336;
+            color: #c62828;
+        }
+        
+        .option-label {
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        
+        .selected .option-label {
+            background: #4caf50;
+        }
+        
+        .correct .option-label {
+            background: #4caf50;
+        }
+        
+        .incorrect .option-label {
+            background: #f44336;
+        }
+        
+        .buttons {
+            padding: 20px 40px;
+            background: #f8f9fa;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+        
+        .btn-submit {
+            background: linear-gradient(45deg, #4caf50, #45a049);
+            color: white;
+        }
+        
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+        
+        .btn-submit:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        
+        .btn-next {
+            background: linear-gradient(45deg, #2196f3, #1976d2);
+            color: white;
+        }
+        
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+        }
+        
+        .btn-prev {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+        
+        .btn-prev:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+        
+        .result {
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .result.correct {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 2px solid #4caf50;
+        }
+        
+        .result.incorrect {
+            background: #ffebee;
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+        
+        .explanation {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .explanation h4 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        
+        .explanation p {
+            color: #5d4037;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .results-container {
+            padding: 40px;
+            display: none;
+            text-align: center;
+        }
+        
+        .final-score {
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .score-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .score-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .answer-review {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .review-item.correct {
+            background: #e8f5e8;
+        }
+        
+        .review-item.incorrect {
+            background: #ffebee;
+        }
+        
+        @keyframes celebration {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .celebrate {
+            animation: celebration 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ 전기기능사 CBT</h1>
+            <p>2006년 07월 10일 필기 기출문제</p>
+            <div class="exam-info">
+                <div class="info-item">
+                    <div>시험 과목</div>
+                    <div>전기 이론</div>
+                </div>
+                <div class="info-item">
+                    <div>문제 수</div>
+                    <div>10문제</div>
+                </div>
+                <div class="info-item">
+                    <div>시험 시간</div>
+                    <div>15분</div>
+                </div>
+                <div class="info-item">
+                    <div>합격 기준</div>
+                    <div>60점 이상</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div class="progress-info">
+                <span>문제 <span id="currentQuestion">1</span> / 10</span>
+                <span class="timer" id="timer">⏱️ 15:00</span>
+            </div>
+        </div>
+        
+        <div class="question-container" id="questionContainer">
+            <div class="question-header">
+                <div class="question-number" id="questionNumber">문제 1</div>
+                <div class="subject">1과목: 전기 이론</div>
+            </div>
+            
+            <div class="question-text" id="questionText"></div>
+            
+            <div class="question-image" id="questionImage" style="display: none;">
+                <div class="image-placeholder">문제 관련 이미지가 여기에 표시됩니다</div>
+            </div>
+            
+            <div class="options" id="options"></div>
+            
+            <div id="result" class="result" style="display: none;"></div>
+            <div id="explanationDiv" class="explanation" style="display: none;"></div>
+        </div>
+        
+        <div class="buttons">
+            <button class="btn btn-prev" id="prevBtn" onclick="previousQuestion()" style="display: none;">◀ 이전</button>
+            <div>
+                <button class="btn btn-submit" id="submitBtn" onclick="submitAnswer()" disabled>답안 제출</button>
+            </div>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()" style="display: none;">다음 ▶</button>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <div class="final-score">
+                <h2>🏆 시험 결과</h2>
+                <div class="score-grid">
+                    <div class="score-item">
+                        <span class="score-number" id="finalScore">0</span>
+                        <span>점수</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-number" id="correctCount">0</span>
+                        <span>정답 수</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-number" id="accuracy">0%</span>
+                        <span>정답률</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-number" id="grade">F</span>
+                        <span>등급</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-review" id="answerReview">
+                <h3>📝 답안 검토</h3>
+                <div id="reviewList"></div>
+            </div>
+            
+            <div class="buttons">
+                <button class="btn btn-submit" onclick="restartExam()">🔄 다시 시작</button>
+                <button class="btn btn-next" onclick="reviewAnswers()">📋 오답 노트</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                number: 1,
+                text: "2전력계법으로 3상 전력을 측정할 때 지시값이 P₁=200W, P₂=200W이었다. 부하전력(W)은?",
+                options: ["600", "500", "400", "300"],
+                correct: 2,
+                explanation: "2전력계법에서 3상 전력 = P₁ + P₂ = 200W + 200W = 400W"
+            },
+            {
+                number: 2,
+                text: "다음은 어떤 법칙을 설명한 것인가?\n\n'전류가 흐르고 하면 고압의 전류의 흐름을 방해한다. 또, 전류가 감소하면 미를 계속 유지하려고 하는 성질이 있다.'",
+                options: ["쿨롱의 법칙", "렌츠의 법칙", "패러데이의 법칙", "플레밍의 왼손 법칙"],
+                correct: 1,
+                explanation: "렌츠의 법칙: 유도 전류는 자신을 발생시킨 자속의 변화를 방해하는 방향으로 흐른다."
+            },
+            {
+                number: 3,
+                text: "플레밍의 왼손법칙에서 전류의 방향을 나타내는 손가락은?",
+                options: ["엄지", "검지", "중지", "약지"],
+                correct: 2,
+                explanation: "플레밍의 왼손법칙에서 중지는 전류(Current), 검지는 자기장(Magnetic field), 엄지는 힘(Force)의 방향을 나타낸다."
+            },
+            {
+                number: 4,
+                text: "진공 중에 10μC과 20μC의 점전하를 1m의 거리로 놓았을 때 작용하는 힘(N)은?",
+                options: ["18×10⁻¹", "2×10⁻²", "9.8×10⁻⁹", "98×10⁻⁹"],
+                correct: 0,
+                explanation: "쿨롱의 법칙: F = k(q₁q₂)/r² = 9×10⁹ × (10×10⁻⁶ × 20×10⁻⁶)/1² = 1.8N = 18×10⁻¹N"
+            },
+            {
+                number: 5,
+                text: "어느 회로의 전류가 다음과 같을 때, 이 회로에 대한 전류의 실효값(A)은?",
+                hasImage: true,
+                imageFile: "5.jpg",
+                imageDescription: "전류 수식: i = 3 + 10√2 sin(ωt - π/3) + 5√2 sin(3ωt - π/3) (A)",
+                options: ["11.6", "23.2", "32.2", "48.3"],
+                correct: 0,
+                explanation: "실효값 = √(직류성분² + 교류성분들의 실효값²의 합) = √(3² + 10² + 5²) = √(9 + 100 + 25) = √134 ≈ 11.6A"
+            },
+            {
+                number: 6,
+                text: "전력량 1Wh와 그 의미가 같은 것은?",
+                options: ["1C", "1J", "3600C", "3600J"],
+                correct: 3,
+                explanation: "1Wh = 1W × 1h = 1W × 3600s = 3600J (1W = 1J/s이므로)"
+            },
+            {
+                number: 7,
+                text: "평형 3상 회로에서 1상의 소비전력이 P(W)라면, 3상회로 전체 소비전력(W)은?",
+                options: ["2P", "√2 P", "3P", "√3 P"],
+                correct: 2,
+                explanation: "평형 3상 회로에서 각 상의 전력이 같으므로 전체 전력 = 3 × P = 3P"
+            },
+            {
+                number: 8,
+                text: "어떤 교류회로의 순시값이 v=√2Vsinωt(V)인 전압에서 ωt=π/6(rad)일 때 100√2V이면 이 전압의 실효값(V)은?",
+                options: ["100", "100√2", "200", "200√2"],
+                correct: 2,
+                explanation: "v = √2V sin(π/6) = √2V × 1/2 = V√2/2 = 100√2V\n따라서 V = 200V (실효값)"
+            },
+            {
+                number: 9,
+                text: "공기 중에서 m(Wb)의 자극으로부터 나오는 자속수는? (문제 오류로 가답안 발표시 1번으로 발표하였지만 확정답안 발표시 1, 4번이 정답 처리되었습니다. 여기서는 4번을 누르면 정답 처리 됩니다.)",
+                options: ["m", "μ₀m", "1/m", "m/μ₀"],
+                correct: 3,
+                explanation: "공기 중(진공과 유사)에서 자속 = 자극/투자율 = m/μ₀"
+            },
+            {
+                number: 10,
+                text: "그림과 같은 RC 병렬회로의 위상각 θ는?",
+                hasImage: true,
+                imageFile: "10.jpg",
+                imageDescription: "RC 병렬회로 페이저 다이어그램 (I, Ic, IR, θ, E 표시)",
+                options: ["tan⁻¹(ωC/R)", "tan⁻¹CR", "tan⁻¹(R/ωC)", "tan⁻¹(1/ωCR)"],
+                correct: 1,
+                explanation: "RC 병렬회로에서 위상각 θ = tan⁻¹(Ic/IR) = tan⁻¹(V×ωC)/(V/R) = tan⁻¹(ωCR)"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let selectedOption = null;
+        let isAnswered = false;
+        let userAnswers = [];
+        let timeLeft = 900; // 15분
+        let timer = null;
+        let startTime = null;
+
+        function startExam() {
+            startTime = new Date();
+            startTimer();
+            displayQuestion();
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishExam();
+                }
+                timeLeft--;
+            }, 1000);
+        }
+
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // 진행률 업데이트
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('currentQuestion').textContent = currentQuestionIndex + 1;
+            
+            // 문제 정보 표시
+            document.getElementById('questionNumber').textContent = `문제 ${question.number}`;
+            document.getElementById('questionText').textContent = question.text;
+            
+            // 이미지 표시
+            const questionImage = document.getElementById('questionImage');
+            if (question.hasImage) {
+                questionImage.style.display = 'block';
+                if (question.imageFile) {
+                    // 실제 이미지 파일이 있는 경우
+                    questionImage.innerHTML = `
+                        <img src="images/${question.imageFile}" 
+                             alt="${question.imageDescription || '문제 관련 이미지'}" 
+                             style="max-width: 100%; height: auto; border-radius: 8px;">
+                    `;
+                } else {
+                    // 이미지 파일이 없는 경우 플레이스홀더 표시
+                    questionImage.innerHTML = `<div class="image-placeholder">📊 ${question.imageDescription || '문제 관련 이미지'}</div>`;
+                }
+            } else {
+                questionImage.style.display = 'none';
+            }
+            
+            // 선택지 표시
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.dataset.value = index;
+                optionDiv.innerHTML = `
+                    <div class="option-label">${['①', '②', '③', '④'][index]}</div>
+                    <span>${option}</span>
+                `;
+                optionDiv.addEventListener('click', selectOption);
+                optionsContainer.appendChild(optionDiv);
+            });
+            
+            // 상태 리셋
+            selectedOption = null;
+            isAnswered = false;
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('explanationDiv').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'none';
+            document.getElementById('prevBtn').style.display = currentQuestionIndex > 0 ? 'block' : 'none';
+            
+            // 제출 버튼 텍스트 변경
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.textContent = '답안 제출';
+            submitBtn.style.display = 'block';
+        }
+
+        function selectOption(e) {
+            if (isAnswered) return;
+            
+            // 이전 선택 해제
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // 현재 선택 표시
+            e.currentTarget.classList.add('selected');
+            selectedOption = parseInt(e.currentTarget.dataset.value);
+            
+            // 제출 버튼 활성화
+            document.getElementById('submitBtn').disabled = false;
+        }
+
+        function submitAnswer() {
+            if (selectedOption === null || isAnswered) return;
+            
+            isAnswered = true;
+            const question = questions[currentQuestionIndex];
+            const isCorrect = selectedOption === question.correct;
+            
+            // 사용자 답안 저장
+            userAnswers[currentQuestionIndex] = {
+                selected: selectedOption,
+                correct: isCorrect,
+                question: question
+            };
+            
+            // 정답 표시
+            document.querySelectorAll('.option').forEach((option, index) => {
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (index === selectedOption && !isCorrect) {
+                    option.classList.add('incorrect');
+                }
+                option.style.pointerEvents = 'none';
+            });
+            
+            // 결과 표시
+            const resultDiv = document.getElementById('result');
+            if (isCorrect) {
+                resultDiv.innerHTML = '🎉 정답입니다!';
+                resultDiv.className = 'result correct';
+                document.querySelector('.container').classList.add('celebrate');
+                setTimeout(() => {
+                    document.querySelector('.container').classList.remove('celebrate');
+                }, 600);
+            } else {
+                resultDiv.innerHTML = `❌ 틀렸습니다. 정답은 ${['①', '②', '③', '④'][question.correct]} ${question.options[question.correct]} 입니다.`;
+                resultDiv.className = 'result incorrect';
+            }
+            resultDiv.style.display = 'block';
+            
+            // 해설 표시
+            const explanationDiv = document.getElementById('explanationDiv');
+            explanationDiv.innerHTML = `
+                <h4>📝 해설</h4>
+                <p>${question.explanation}</p>
+            `;
+            explanationDiv.style.display = 'block';
+            
+            // 버튼 상태 변경
+            document.getElementById('submitBtn').style.display = 'none';
+            if (currentQuestionIndex < questions.length - 1) {
+                document.getElementById('nextBtn').style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').textContent = '시험 완료';
+                document.getElementById('nextBtn').style.display = 'block';
+                document.getElementById('nextBtn').onclick = finishExam;
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                finishExam();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+                
+                // 이전에 답한 문제라면 답안 복원
+                if (userAnswers[currentQuestionIndex]) {
+                    const answer = userAnswers[currentQuestionIndex];
+                    selectedOption = answer.selected;
+                    
+                    // 선택지 표시
+                    document.querySelectorAll('.option').forEach((option, index) => {
+                        if (index === answer.selected) {
+                            option.classList.add('selected');
+                        }
+                        if (index === answer.question.correct) {
+                            option.classList.add('correct');
+                        } else if (index === answer.selected && !answer.correct) {
+                            option.classList.add('incorrect');
+                        }
+                        option.style.pointerEvents = 'none';
+                    });
+                    
+                    // 결과와 해설 표시
+                    const resultDiv = document.getElementById('result');
+                    if (answer.correct) {
+                        resultDiv.innerHTML = '🎉 정답입니다!';
+                        resultDiv.className = 'result correct';
+                    } else {
+                        resultDiv.innerHTML = `❌ 틀렸습니다. 정답은 ${['①', '②', '③', '④'][answer.question.correct]} ${answer.question.options[answer.question.correct]} 입니다.`;
+                        resultDiv.className = 'result incorrect';
+                    }
+                    resultDiv.style.display = 'block';
+                    
+                    const explanationDiv = document.getElementById('explanationDiv');
+                    explanationDiv.innerHTML = `
+                        <h4>📝 해설</h4>
+                        <p>${answer.question.explanation}</p>
+                    `;
+                    explanationDiv.style.display = 'block';
+                    
+                    document.getElementById('submitBtn').style.display = 'none';
+                    document.getElementById('nextBtn').style.display = 'block';
+                    isAnswered = true;
+                }
+            }
+        }
+
+        function finishExam() {
+            clearInterval(timer);
+            
+            // 답하지 않은 문제들을 오답 처리
+            for (let i = 0; i < questions.length; i++) {
+                if (!userAnswers[i]) {
+                    userAnswers[i] = {
+                        selected: -1,
+                        correct: false,
+                        question: questions[i]
+                    };
+                }
+            }
+            
+            // 결과 계산
+            const correctCount = userAnswers.filter(answer => answer.correct).length;
+            const totalQuestions = questions.length;
+            const score = Math.round((correctCount / totalQuestions) * 100);
+            const accuracy = Math.round((correctCount / totalQuestions) * 100);
+            
+            // 등급 계산
+            let grade = 'F';
+            if (score >= 90) grade = 'A+';
+            else if (score >= 80) grade = 'A';
+            else if (score >= 70) grade = 'B';
+            else if (score >= 60) grade = 'C';
+            
+            // 시험 완료 시간 계산
+            const endTime = new Date();
+            const timeSpent = Math.round((endTime - startTime) / 60000);
+            
+            // 화면 전환
+            document.getElementById('questionContainer').style.display = 'none';
+            document.querySelector('.buttons').style.display = 'none';
+            document.getElementById('resultsContainer').style.display = 'block';
+            
+            // 결과 표시
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctCount').textContent = `${correctCount}/${totalQuestions}`;
+            document.getElementById('accuracy').textContent = `${accuracy}%`;
+            document.getElementById('grade').textContent = grade;
+            
+            // 답안 검토 리스트 생성
+            const reviewList = document.getElementById('reviewList');
+            reviewList.innerHTML = '';
+            
+            userAnswers.forEach((answer, index) => {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = `review-item ${answer.correct ? 'correct' : 'incorrect'}`;
+                
+                const selectedText = answer.selected >= 0 ? 
+                    `${['①', '②', '③', '④'][answer.selected]} ${answer.question.options[answer.selected]}` : 
+                    '미선택';
+                
+                const correctText = `${['①', '②', '③', '④'][answer.question.correct]} ${answer.question.options[answer.question.correct]}`;
+                
+                reviewItem.innerHTML = `
+                    <div>
+                        <strong>문제 ${index + 1}</strong>
+                        <div style="font-size: 12px; color: #666;">
+                            선택: ${selectedText} | 정답: ${correctText}
+                        </div>
+                    </div>
+                    <div style="font-size: 20px;">
+                        ${answer.correct ? '✅' : '❌'}
+                    </div>
+                `;
+                
+                reviewList.appendChild(reviewItem);
+            });
+            
+            // 축하 메시지
+            if (score >= 60) {
+                document.querySelector('.final-score h2').innerHTML = '🎉 합격을 축하합니다!';
+                document.querySelector('.final-score').style.background = 'linear-gradient(45deg, #4caf50, #45a049)';
+            } else {
+                document.querySelector('.final-score h2').innerHTML = '📚 더 공부하셔야 합니다';
+                document.querySelector('.final-score').style.background = 'linear-gradient(45deg, #f44336, #d32f2f)';
+            }
+        }
+
+        function restartExam() {
+            // 모든 상태 초기화
+            currentQuestionIndex = 0;
+            selectedOption = null;
+            isAnswered = false;
+            userAnswers = [];
+            timeLeft = 900;
+            
+            // 화면 초기화
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('questionContainer').style.display = 'block';
+            document.querySelector('.buttons').style.display = 'flex';
+            
+            // 시험 재시작
+            startExam();
+        }
+
+        function reviewAnswers() {
+            alert('오답 노트 기능은 구현 예정입니다! 📚\n\n틀린 문제들을 다시 한번 확인해보시고,\n해설을 참고하여 학습하세요.');
+        }
+
+        // 키보드 단축키
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('resultsContainer').style.display !== 'none') return;
+            
+            if (!isAnswered) {
+                // 숫자 키로 선택지 선택
+                const keyMap = {
+                    '1': 0, '2': 1, '3': 2, '4': 3
+                };
+                
+                if (keyMap.hasOwnProperty(e.key)) {
+                    const optionIndex = keyMap[e.key];
+                    const options = document.querySelectorAll('.option');
+                    if (options[optionIndex]) {
+                        options[optionIndex].click();
+                    }
+                }
+                
+                // Enter로 제출
+                if (e.key === 'Enter' && selectedOption !== null) {
+                    submitAnswer();
+                }
+            } else {
+                // 답변 후 Enter나 스페이스로 다음 문제
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (currentQuestionIndex < questions.length - 1) {
+                        nextQuestion();
+                    } else {
+                        finishExam();
+                    }
+                }
+            }
+            
+            // 화살표 키로 이동
+            if (e.key === 'ArrowLeft' && currentQuestionIndex > 0) {
+                previousQuestion();
+            }
+            if (e.key === 'ArrowRight' && isAnswered) {
+                if (currentQuestionIndex < questions.length - 1) {
+                    nextQuestion();
+                } else {
+                    finishExam();
+                }
+            }
+        });
+
+        // 시험 시작
+        window.addEventListener('load', () => {
+            startExam();
+        });
+    </script>
+</body>
+</html>
