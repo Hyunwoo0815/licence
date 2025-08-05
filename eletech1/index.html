@@ -349,11 +349,11 @@
                 <div class="filter-label">연도:</div>
                 <div class="filter-options">
                     <button class="filter-btn active">전체</button>
-                    <button class="filter-btn">2024</button>
-                    <button class="filter-btn">2023</button>
-                    <button class="filter-btn">2022</button>
-                    <button class="filter-btn">2021</button>
-                    <button class="filter-btn">2020</button>
+                    <button class="filter-btn">2016</button>
+                    <button class="filter-btn">2015</button>
+                    <button class="filter-btn">2014</button>
+                    <button class="filter-btn">2013</button>
+                    <button class="filter-btn">2012</button>
                 </div>
             </div>
         </div>
@@ -371,10 +371,10 @@
         // 전기기능사 기출문제 데이터
         const examData = [
             {
-                id: "20240714",
-                title: "2024년 07월 14일 필기",
-                date: "2024.07.14",
-                year: "2024",
+                id: "20160710",
+                title: "2016년 07월 10일 필기",
+                date: "2016.07.10",
+                year: "2016",
                 questions: "60문항 (전기이론 20문항, 전기기기 20문항, 전기설비 20문항)",
                 subjects: ["전기이론", "전기기기", "전기설비"],
                 badge: "NEW",
@@ -595,7 +595,7 @@
             console.log(`${examId} 전기기능사 온라인 풀이 시작`);
             
             // 실제 CBT 페이지가 있는 경우만 이동
-            const availableExams = ["20060710"]; // 실제 구현된 CBT 목록
+            const availableExams = ["20160710"]; // 실제 구현된 CBT 목록
             
             if (availableExams.includes(examId)) {
                 window.location.href = `./${examId}`;
